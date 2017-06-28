@@ -7,38 +7,38 @@ using Infnet.DotnetProject.Assessment.Presentation.Models;
 
 namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
 {
-    public class PerfilsController : Controller
+    public class ProfileController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Perfils
+        // GET: Profile
         public ActionResult Index()
         {
             return View(db.Profiles.ToList());
         }
 
-        // GET: Perfils/Details/5
+        // GET: Profile/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var perfil = db.Profiles.Find(id);
-            if (perfil == null)
+            var profile = db.Profiles.Find(id);
+            if (profile == null)
             {
                 return HttpNotFound();
             }
-            return View(perfil);
+            return View(profile);
         }
 
-        // GET: Perfils/Create
+        // GET: Profile/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Perfils/Create
+        // POST: Profile/Create
         // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -54,22 +54,22 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: Perfils/Edit/5
+        // GET: Profile/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var perfil = db.Profiles.Find(id);
-            if (perfil == null)
+            var profile = db.Profiles.Find(id);
+            if (profile == null)
             {
                 return HttpNotFound();
             }
-            return View(perfil);
+            return View(profile);
         }
 
-        // POST: Perfils/Edit/5
+        // POST: Profile/Edit/5
         // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -85,28 +85,28 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
             return View(profile);
         }
 
-        // GET: Perfils/Delete/5
+        // GET: Profile/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var perfil = db.Profiles.Find(id);
-            if (perfil == null)
+            var profile = db.Profiles.Find(id);
+            if (profile == null)
             {
                 return HttpNotFound();
             }
-            return View(perfil);
+            return View(profile);
         }
 
-        // POST: Perfils/Delete/5
+        // POST: Profile/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var perfil = db.Profiles.Find(id);
-            db.Profiles.Remove(perfil);
+            var profile = db.Profiles.Find(id);
+            db.Profiles.Remove(profile);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

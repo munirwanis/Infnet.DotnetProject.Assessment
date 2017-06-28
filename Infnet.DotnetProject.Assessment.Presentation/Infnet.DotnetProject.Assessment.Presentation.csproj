@@ -213,7 +213,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\PerfilsController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\postagemsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -289,10 +289,10 @@
     <Content Include="Views\postagems\Details.cshtml" />
     <Content Include="Views\postagems\Edit.cshtml" />
     <Content Include="Views\postagems\Index.cshtml" />
-    <Content Include="Views\Perfils\Create.cshtml" />
-    <Content Include="Views\Perfils\Details.cshtml" />
-    <Content Include="Views\Perfils\Edit.cshtml" />
-    <Content Include="Views\Perfils\Index.cshtml" />
+    <Content Include="Views\Profile\Create.cshtml" />
+    <Content Include="Views\Profile\Details.cshtml" />
+    <Content Include="Views\Profile\Edit.cshtml" />
+    <Content Include="Views\Profile\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
