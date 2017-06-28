@@ -10,22 +10,30 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 <div class="row">
-    @foreach (var item in Model)
+    @*@foreach (var item in Model)*@
+    @for (var i = Model.Count() - 1; i >= 0; i--)
     {
-
         <div class="col-sm-12 col-md-12 col-lg-12">
             <div class="panel panel-default">
-                <p>Usuario : @Html.DisplayFor(modelItem => item.UserEmail)</p>
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(modelItem => modelItem.UserEmail)
+                    </dt>
 
-                @if (!(item.Image == null))
+                    <dd>
+                        @Html.DisplayFor(modelItem => Model.ElementAt(i).UserEmail)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(modelItem => modelItem.Content)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(modelItem => Model.ElementAt(i).Content)
+                    </dd>
+                </dl>
+                @if (!(Model.ElementAt(i).Image == null))
                 {
-                    <div class="panel-thumbnail"><img src="@Html.DisplayFor(modelItem => item.Image)" class="img-responsive"></div>
+                    <div class="panel-thumbnail"><img src="@Html.DisplayFor(modelItem => Model.ElementAt(i).Image)" class="img-responsive"></div>
                 }
-                <div class="panel-body">
-                    <p class="lead">Conteudo:</p>
-                    <p>@Html.DisplayFor(modelItem => item.Content)</p>
-                    <p></p>
-                </div>
             </div>
             <br />
         </div>
