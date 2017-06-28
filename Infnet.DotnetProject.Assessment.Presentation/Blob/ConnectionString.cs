@@ -1,9 +1,5 @@
 ﻿using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Infnet.DotnetProject.Assessment.Presentation.Blob
 {
