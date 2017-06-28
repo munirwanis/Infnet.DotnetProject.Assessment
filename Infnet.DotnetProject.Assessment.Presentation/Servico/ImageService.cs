@@ -7,7 +7,7 @@ using System.Web;
 using System.IO;
 using System.Diagnostics;
 
-namespace WEB.Servico
+namespace Infnet.DotnetProject.Assessment.Presentation.Servico
 {
     public class ImageService
     {

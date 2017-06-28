@@ -3,9 +3,9 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Infnet.DotnetProject.Assessment.Domain;
-using WEB.Models;
+using Infnet.DotnetProject.Assessment.Presentation.Models;
 
-namespace WEB.Controllers
+namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
 {
     public class PerfilsController : Controller
     {

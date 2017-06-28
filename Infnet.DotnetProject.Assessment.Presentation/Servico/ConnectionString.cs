@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WEB.Servico
+namespace Infnet.DotnetProject.Assessment.Presentation.Servico
 {
     public static class ConnectionString
     {

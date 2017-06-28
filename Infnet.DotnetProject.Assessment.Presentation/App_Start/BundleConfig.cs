@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace WEB
+namespace Infnet.DotnetProject.Assessment.Presentation
 {
     public class BundleConfig
     {

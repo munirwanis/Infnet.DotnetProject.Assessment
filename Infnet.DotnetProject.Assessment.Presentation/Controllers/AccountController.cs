@@ -5,9 +5,9 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using WEB.Models;
+using Infnet.DotnetProject.Assessment.Presentation.Models;
 
-namespace WEB.Controllers
+namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
 {
     [Authorize]
     public class AccountController : Controller

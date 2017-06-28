@@ -4,11 +4,11 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Infnet.DotnetProject.Assessment.Domain;
-using WEB.Models;
+using Infnet.DotnetProject.Assessment.Presentation.Models;
 using System.Threading.Tasks;
-using WEB.Servico;
+using Infnet.DotnetProject.Assessment.Presentation.Servico;
 
-namespace WEB.Controllers
+namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
 {
     public class postagemsController : Controller
     {

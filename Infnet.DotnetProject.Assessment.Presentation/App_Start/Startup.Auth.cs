@@ -5,9 +5,9 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
-using WEB.Models;
+using Infnet.DotnetProject.Assessment.Presentation.Models;
 
-namespace WEB
+namespace Infnet.DotnetProject.Assessment.Presentation
 {
     public partial class Startup
     {

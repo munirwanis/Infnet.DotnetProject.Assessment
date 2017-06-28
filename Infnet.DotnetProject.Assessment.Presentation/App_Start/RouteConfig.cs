@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace WEB
+namespace Infnet.DotnetProject.Assessment.Presentation
 {
     public class RouteConfig
     {
