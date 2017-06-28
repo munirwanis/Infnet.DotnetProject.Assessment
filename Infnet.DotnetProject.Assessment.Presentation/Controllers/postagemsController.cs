@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using Infnet.DotnetProject.Assessment.Domain;
 using Infnet.DotnetProject.Assessment.Presentation.Models;
 using System.Threading.Tasks;
-using Infnet.DotnetProject.Assessment.Presentation.Servico;
+using Infnet.DotnetProject.Assessment.Presentation.Blob;
 
 namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
 {

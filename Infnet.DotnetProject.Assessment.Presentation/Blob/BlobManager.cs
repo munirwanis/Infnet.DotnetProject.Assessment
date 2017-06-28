@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Infnet.DotnetProject.Assessment.Presentation.Servico
+namespace Infnet.DotnetProject.Assessment.Presentation.Blob
 {
     public class BlobManager
     {

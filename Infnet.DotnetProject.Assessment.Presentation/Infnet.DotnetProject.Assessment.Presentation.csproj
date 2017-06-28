@@ -222,9 +222,9 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Servico\BlobManager.cs" />
-    <Compile Include="Servico\ConnectionString.cs" />
-    <Compile Include="Servico\ImageService.cs" />
+    <Compile Include="Blob\BlobManager.cs" />
+    <Compile Include="Blob\ConnectionString.cs" />
+    <Compile Include="Blob\ImageService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
