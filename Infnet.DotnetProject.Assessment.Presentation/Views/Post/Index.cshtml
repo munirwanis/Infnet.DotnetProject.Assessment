@@ -10,7 +10,6 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 <div class="row">
-    @*@foreach (var item in Model)*@
     @for (var i = Model.Count() - 1; i >= 0; i--)
     {
         <div class="col-sm-12 col-md-12 col-lg-12">
@@ -29,11 +28,16 @@
                     <dd>
                         @Html.DisplayFor(modelItem => Model.ElementAt(i).Content)
                     </dd>
-                </dl>
-                @if (!(Model.ElementAt(i).Image == null))
+                    @if (!(Model.ElementAt(i).Image == null))
                 {
-                    <div class="panel-thumbnail"><img src="@Html.DisplayFor(modelItem => Model.ElementAt(i).Image)" class="img-responsive"></div>
-                }
+                        <dt>
+                            @Html.DisplayNameFor(modelItem => modelItem.Image)
+                        </dt>
+                        <dd>
+                            <div class="panel-thumbnail"><img src="@Html.DisplayFor(modelItem => Model.ElementAt(i).Image)" class="img-responsive"></div>
+                        </dd>
+                    }
+                </dl>
             </div>
             <br />
         </div>

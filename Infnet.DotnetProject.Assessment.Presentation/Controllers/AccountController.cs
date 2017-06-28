@@ -107,7 +107,7 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
             }
             else
             {
-                return RedirectToAction("Create", "Perfils");
+                return RedirectToAction("Create", "Profile");
             }
         }
 
