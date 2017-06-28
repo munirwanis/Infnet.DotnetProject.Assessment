@@ -1,7 +1,7 @@
-﻿@model Infnet.DotnetProject.Assessment.Presentation.Models.ManageLoginsViewModel
+﻿@model WEB.Models.ManageLoginsViewModel
 @using Microsoft.Owin.Security
 @{
-    ViewBag.Title = "Manage your external logins";
+    ViewBag.Title = "Gerenciar seus logins externos";
 }
 
 <h2>@ViewBag.Title.</h2>
@@ -21,7 +21,7 @@
     {
         if (Model.CurrentLogins.Count > 0)
         {
-            <h4>Registered Logins</h4>
+            <h4>Logons registrados</h4>
             <table class="table">
                 <tbody>
                     @foreach (var account in Model.CurrentLogins)
@@ -37,7 +37,7 @@
                                         <div>
                                             @Html.Hidden("loginProvider", account.LoginProvider)
                                             @Html.Hidden("providerKey", account.ProviderKey)
-                                            <input type="submit" class="btn btn-default" value="Remove" title="Remove this @account.LoginProvider login from your account" />
+                                            <input type="submit" class="btn btn-default" value="Remover" title="Remova este logon @account.LoginProvider de sua conta" />
                                         </div>
                                     }
                                 }
@@ -60,7 +60,7 @@
                 <p>
                     @foreach (AuthenticationDescription p in Model.OtherLogins)
                     {
-                        <button type="submit" class="btn btn-default" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>
+                        <button type="submit" class="btn btn-default" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Efetue login usando sua conta @p.Caption">@p.AuthenticationType</button>
                     }
                 </p>
                 </div>

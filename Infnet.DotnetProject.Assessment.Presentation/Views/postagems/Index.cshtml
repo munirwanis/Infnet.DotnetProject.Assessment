@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Infnet.DotnetProject.Assessment.Domain.Post>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<div class="row">
+    @foreach (var item in Model)
+    {
+
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <div class="panel panel-default">
+                <p>Usuario : @Html.DisplayFor(modelItem => item.UserEmail)</p>
+
+                @if (!(item.Image == null))
+                {
+                    <div class="panel-thumbnail"><img src="@Html.DisplayFor(modelItem => item.Image)" class="img-responsive"></div>
+                }
+                <div class="panel-body">
+                    <p class="lead">Conteudo:</p>
+                    <p>@Html.DisplayFor(modelItem => item.Content)</p>
+                    <p></p>
+                </div>
+            </div>
+            <br />
+        </div>
+
+    }
+    <br />
+</div>
+<br />
+<br />
+<br />

@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace Infnet.DotnetProject.Assessment.Presentation
+namespace WEB
 {
     public class FilterConfig
     {

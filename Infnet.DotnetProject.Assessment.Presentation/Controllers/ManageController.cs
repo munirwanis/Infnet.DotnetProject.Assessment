@@ -6,9 +6,9 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Infnet.DotnetProject.Assessment.Presentation.Models;
+using WEB.Models;
 
-namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
+namespace WEB.Controllers
 {
     [Authorize]
     public class ManageController : Controller
@@ -55,12 +55,12 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
-                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
-                : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
-                : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
-                : message == ManageMessageId.Error ? "An error has occurred."
-                : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
-                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                message == ManageMessageId.ChangePasswordSuccess ? "Sua senha foi alterada."
+                : message == ManageMessageId.SetPasswordSuccess ? "Sua senha foi definida."
+                : message == ManageMessageId.SetTwoFactorSuccess ? "Seu provedor de autenticação de dois fatores foi definido."
+                : message == ManageMessageId.Error ? "Ocorreu um erro."
+                : message == ManageMessageId.AddPhoneSuccess ? "Seu número de telefone foi adicionado."
+                : message == ManageMessageId.RemovePhoneSuccess ? "Seu número de telefone foi removido."
                 : "";
 
             var userId = User.Identity.GetUserId();
@@ -116,14 +116,14 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
             {
                 return View(model);
             }
-            // Generate the token and send it
+            // Gerar o token e enviá-lo
             var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), model.Number);
             if (UserManager.SmsService != null)
             {
                 var message = new IdentityMessage
                 {
                     Destination = model.Number,
-                    Body = "Your security code is: " + code
+                    Body = "Seu código de segurança é:" + code
                 };
                 await UserManager.SmsService.SendAsync(message);
             }
@@ -165,7 +165,7 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
         public async Task<ActionResult> VerifyPhoneNumber(string phoneNumber)
         {
             var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), phoneNumber);
-            // Send an SMS through the SMS provider to verify the phone number
+            // Envie um SMS através do provedor de SMS para verificar o número de telefone
             return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
         }
 
@@ -189,8 +189,8 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
                 }
                 return RedirectToAction("Index", new { Message = ManageMessageId.AddPhoneSuccess });
             }
-            // If we got this far, something failed, redisplay form
-            ModelState.AddModelError("", "Failed to verify phone");
+            // Se chegamos até aqui, algo falhou, mostrar formulário novamente
+            ModelState.AddModelError("", "Falha em verificar telefone");
             return View(model);
         }
 
@@ -272,7 +272,7 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
                 AddErrors(result);
             }
 
-            // If we got this far, something failed, redisplay form
+            // Se chegamos até aqui, algo falhou, mostrar formulário novamente
             return View(model);
         }
 
@@ -281,8 +281,8 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
         public async Task<ActionResult> ManageLogins(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
-                message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
-                : message == ManageMessageId.Error ? "An error has occurred."
+                message == ManageMessageId.RemoveLoginSuccess ? "O login externo foi removido."
+                : message == ManageMessageId.Error ? "Ocorreu um erro."
                 : "";
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
             if (user == null)
@@ -305,7 +305,7 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LinkLogin(string provider)
         {
-            // Request a redirect to the external login provider to link a login for the current user
+            // Solicitar um redirecionamento para o provedor de login externo para vincular um login para o usuário atual
             return new AccountController.ChallengeResult(provider, Url.Action("LinkLoginCallback", "Manage"), User.Identity.GetUserId());
         }
 
@@ -333,8 +333,8 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
-        // Used for XSRF protection when adding external logins
+#region Auxiliadores
+        // Usado para proteção XSRF ao adicionar logins externos
         private const string XsrfKey = "XsrfId";
 
         private IAuthenticationManager AuthenticationManager

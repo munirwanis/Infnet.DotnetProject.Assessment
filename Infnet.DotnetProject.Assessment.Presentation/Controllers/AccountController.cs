@@ -1,22 +1,20 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Infnet.DotnetProject.Assessment.Presentation.Models;
+using WEB.Models;
 
-namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
+namespace WEB.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public AccountController()
         {
@@ -73,21 +71,43 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
                 return View(model);
             }
 
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
+            // Isso não conta falhas de login em relação ao bloqueio de conta
+            // Para permitir que falhas de senha acionem o bloqueio da conta, altere para shouldLockout: true
+            
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
+
+            if (result.ToString() == "Failure")
             {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
+                ModelState.AddModelError("", "Invalid login.");
+                return View(model);
+            }
+
+            var usuario = UserManager.FindByEmail(model.Email);
+            
+            Session["UserId"] = usuario.Id;
+            var email = Session["UserEmail"] = usuario.Email;
+
+            var pegarPerfil = db.Profiles.Select(x => x.UserEmail == email.ToString()).FirstOrDefault();
+
+            if (pegarPerfil == true)
+            {
+                switch (result)
+                {
+                    case SignInStatus.Success:
+                        return RedirectToLocal(returnUrl);
+                    case SignInStatus.LockedOut:
+                        return View("Lockout");
+                    case SignInStatus.RequiresVerification:
+                        return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    case SignInStatus.Failure:
+                    default:
+                        ModelState.AddModelError("", "Invalid login.");
+                        return View(model);
+                }
+            }
+            else
+            {
+                return RedirectToAction("Create", "Perfils");
             }
         }
 
@@ -96,7 +116,7 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
         {
-            // Require that the user has already logged in via username/password or external login
+            // Exija que o usuário efetue login via nome de usuário/senha ou login externo
             if (!await SignInManager.HasBeenVerifiedAsync())
             {
                 return View("Error");
@@ -116,10 +136,10 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
                 return View(model);
             }
 
-            // The following code protects for brute force attacks against the two factor codes. 
-            // If a user enters incorrect codes for a specified amount of time then the user account 
-            // will be locked out for a specified amount of time. 
-            // You can configure the account lockout settings in IdentityConfig
+            // O código a seguir protege de ataques de força bruta em relação aos códigos de dois fatores. 
+            // Se um usuário inserir códigos incorretos para uma quantidade especificada de tempo, então a conta de usuário 
+            // será bloqueado por um período especificado de tempo. 
+            // Você pode configurar os ajustes de bloqueio da conta em IdentityConfig
             var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
@@ -129,7 +149,7 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
                     return View("Lockout");
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid code.");
+                    ModelState.AddModelError("", "Código inválido.");
                     return View(model);
             }
         }
@@ -155,20 +175,20 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
+                    // Enviar um email com este link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    // await UserManager.SendEmailAsync(user.Id, "Confirmar sua conta", "Confirme sua conta clicando <a href=\"" + callbackUrl + "\">aqui</a>");
 
                     return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
             }
 
-            // If we got this far, something failed, redisplay form
+            // Se chegamos até aqui e houver alguma falha, exiba novamente o formulário
             return View(model);
         }
 
@@ -205,19 +225,19 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
                 var user = await UserManager.FindByNameAsync(model.Email);
                 if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
+                    // Não revelar que o usuário não existe ou não está confirmado
                     return View("ForgotPasswordConfirmation");
                 }
 
                 // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                // Send an email with this link
+                // Enviar um email com este link
                 // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
                 // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                // await UserManager.SendEmailAsync(user.Id, "Redefinir senha", "Redefina sua senha, clicando <a href=\"" + callbackUrl + "\">aqui</a>");
                 // return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
-            // If we got this far, something failed, redisplay form
+            // Se chegamos até aqui e houver alguma falha, exiba novamente o formulário
             return View(model);
         }
 
@@ -251,7 +271,7 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
             var user = await UserManager.FindByNameAsync(model.Email);
             if (user == null)
             {
-                // Don't reveal that the user does not exist
+                // Não revelar que o usuário não existe
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
             var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
@@ -278,7 +298,7 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
-            // Request a redirect to the external login provider
+            // Solicitar um redirecionamento para o provedor de logon externo
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
 
@@ -309,7 +329,7 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
                 return View();
             }
 
-            // Generate the token and send it
+            // Gerar o token e enviá-lo
             if (!await SignInManager.SendTwoFactorCodeAsync(model.SelectedProvider))
             {
                 return View("Error");
@@ -328,7 +348,7 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
                 return RedirectToAction("Login");
             }
 
-            // Sign in the user with this external login provider if the user already has a login
+            // Faça logon do usuário com este provedor de logon externo se o usuário já tiver um logon
             var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
             switch (result)
             {
@@ -340,7 +360,7 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
                 case SignInStatus.Failure:
                 default:
-                    // If the user does not have an account, then prompt the user to create an account
+                    // Se o usuário não tiver uma conta, solicite que o usuário crie uma conta
                     ViewBag.ReturnUrl = returnUrl;
                     ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
                     return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
@@ -361,7 +381,7 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
 
             if (ModelState.IsValid)
             {
-                // Get the information about the user from the external login provider
+                // Obter as informações sobre o usuário do provedor de logon externo
                 var info = await AuthenticationManager.GetExternalLoginInfoAsync();
                 if (info == null)
                 {
@@ -423,8 +443,8 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
             base.Dispose(disposing);
         }
 
-        #region Helpers
-        // Used for XSRF protection when adding external logins
+        #region Auxiliares
+        // Usado para proteção XSRF ao adicionar logons externos
         private const string XsrfKey = "XsrfId";
 
         private IAuthenticationManager AuthenticationManager

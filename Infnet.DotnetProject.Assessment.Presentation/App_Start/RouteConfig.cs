@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace Infnet.DotnetProject.Assessment.Presentation
+namespace WEB
 {
     public class RouteConfig
     {
@@ -15,7 +15,7 @@ namespace Infnet.DotnetProject.Assessment.Presentation
 
             routes.MapRoute(
                 name: "Default",
-                url: "{controller}/{action}/{id}",
+                url: "{controller}/{action}/{Id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
         }

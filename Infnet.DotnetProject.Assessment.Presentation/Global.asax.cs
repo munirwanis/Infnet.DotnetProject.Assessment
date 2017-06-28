@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 
-namespace Infnet.DotnetProject.Assessment.Presentation
+namespace WEB
 {
     public class MvcApplication : System.Web.HttpApplication
     {
