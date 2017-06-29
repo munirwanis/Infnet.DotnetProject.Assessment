@@ -47,13 +47,13 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,UserId,UserEmail,Content,Image")] Post postagem)
+        public ActionResult Create([Bind(Include = "Id,UserId,UserEmail,Content,Image")] Post post)
         {
-            postagem.UserEmail = Session["UserEmail"].ToString();
-            postagem.UserId = Session["UserId"].ToString();
-            postagem.Image = null;
+            post.UserEmail = Session["UserEmail"].ToString();
+            post.UserId = Session["UserId"].ToString();
+            post.Image = null;
 
-            db.Posts.Add(postagem);
+            db.Posts.Add(post);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
