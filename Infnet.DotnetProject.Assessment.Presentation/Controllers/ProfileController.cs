@@ -1,20 +1,21 @@
-﻿using System.Data.Entity;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Web.Mvc;
 using Infnet.DotnetProject.Assessment.Domain;
-using Infnet.DotnetProject.Assessment.Presentation.Models;
+using System.Collections.Generic;
+using RestSharp;
+using Infnet.DotnetProject.Assessment.Presentation.Helper;
 
 namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
 {
     public class ProfileController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private const string URI = "api/profiles";
 
         // GET: Profile
         public ActionResult Index()
         {
-            return View(db.Profiles.ToList());
+            var profiles = RequestHelper.MakeRequest<List<Profile>>(URI, Method.GET);
+            return View(profiles);
         }
 
         // GET: Profile/Details/5
@@ -24,7 +25,7 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var profile = db.Profiles.Find(id);
+            var profile = RequestHelper.MakeRequest<Profile>($"{URI}/{id}", Method.GET);
             if (profile == null)
             {
                 return HttpNotFound();
@@ -49,8 +50,7 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
             profile.UserEmail = Session["UserEmail"].ToString();
             profile.ProfilePicture = null;
 
-            db.Profiles.Add(profile);
-            db.SaveChanges();
+            RequestHelper.MakeRequest<Profile>(URI, Method.POST, profile);
             return RedirectToAction("Index");
         }
 
@@ -61,7 +61,7 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var profile = db.Profiles.Find(id);
+            var profile = RequestHelper.MakeRequest<Profile>($"{URI}/{id}", Method.GET);
             if (profile == null)
             {
                 return HttpNotFound();
@@ -78,8 +78,7 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(profile).State = EntityState.Modified;
-                db.SaveChanges();
+                RequestHelper.MakeRequest<Profile>($"{URI}/{profile.Id}", Method.PUT);
                 return RedirectToAction("Index");
             }
             return View(profile);
@@ -92,7 +91,7 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var profile = db.Profiles.Find(id);
+            var profile = RequestHelper.MakeRequest<Profile>($"{URI}/{id}", Method.GET);
             if (profile == null)
             {
                 return HttpNotFound();
@@ -105,9 +104,7 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var profile = db.Profiles.Find(id);
-            db.Profiles.Remove(profile);
-            db.SaveChanges();
+            RequestHelper.MakeRequest<Profile>($"{URI}/{id}", Method.DELETE);
             return RedirectToAction("Index");
         }
 
@@ -115,7 +112,7 @@ namespace Infnet.DotnetProject.Assessment.Presentation.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                //db.Dispose();
             }
             base.Dispose(disposing);
         }
